@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TGLabAPI.Domain", "TGLabAPI.Domain\TGLabAPI.Domain.csproj", "{B4D9266E-E27A-4661-9C9A-757A0E2A721F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TGLabAPI.Application", "TGLabAPI.Application\TGLabAPI.Application.csproj", "{93155CC0-4EE6-403B-9002-F809A2FE77B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TGLabAPI.Infrastructure", "TGLabAPI.Infrastructure\TGLabAPI.Infrastructure.csproj", "{55C1FABF-CA01-4A8B-BEB8-CA62D78CC62C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TGLabAPI.WebAPI", "TGLabAPI.WebAPI\TGLabAPI.WebAPI.csproj", "{46FD43D1-3231-401F-8781-02B4380B8398}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4D9266E-E27A-4661-9C9A-757A0E2A721F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4D9266E-E27A-4661-9C9A-757A0E2A721F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4D9266E-E27A-4661-9C9A-757A0E2A721F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D9266E-E27A-4661-9C9A-757A0E2A721F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93155CC0-4EE6-403B-9002-F809A2FE77B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93155CC0-4EE6-403B-9002-F809A2FE77B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93155CC0-4EE6-403B-9002-F809A2FE77B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93155CC0-4EE6-403B-9002-F809A2FE77B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55C1FABF-CA01-4A8B-BEB8-CA62D78CC62C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55C1FABF-CA01-4A8B-BEB8-CA62D78CC62C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55C1FABF-CA01-4A8B-BEB8-CA62D78CC62C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55C1FABF-CA01-4A8B-BEB8-CA62D78CC62C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46FD43D1-3231-401F-8781-02B4380B8398}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46FD43D1-3231-401F-8781-02B4380B8398}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46FD43D1-3231-401F-8781-02B4380B8398}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46FD43D1-3231-401F-8781-02B4380B8398}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
