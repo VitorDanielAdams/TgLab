@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TGLabAPI.Application.Interfaces.Services.Player
+namespace TGLabAPI.Application.Interfaces.Services.Auth
 {
     public interface IPasswordService
     {

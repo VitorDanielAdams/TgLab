@@ -10,5 +10,6 @@ namespace TGLabAPI.Application.Interfaces.Repositories.Player
 {
     public interface IPlayerRepository : IBaseRepository<PlayerEntity>
     {
+        Task<PlayerEntity?> GetByEmail(string email);
     }
 }

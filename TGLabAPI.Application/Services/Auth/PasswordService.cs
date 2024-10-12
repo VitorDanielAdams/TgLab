@@ -4,9 +4,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using TGLabAPI.Application.Interfaces.Services.Player;
+using TGLabAPI.Application.Interfaces.Services.Auth;
 
-namespace TGLabAPI.Application.Services.Player
+namespace TGLabAPI.Application.Services.Auth
 {
     public class PasswordService : IPasswordService
     {

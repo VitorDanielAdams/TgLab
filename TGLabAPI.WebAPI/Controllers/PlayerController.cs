@@ -16,19 +16,19 @@ namespace TgLabApi.Controllers
             _playerService = playerService;
         }
 
-        [HttpPost(Name = "CreatePlayer")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<GetPlayerResult>> CreateAsync([FromBody] CreatePlayerRequest playerRequest)
+        public async Task<ActionResult<GetPlayerResult>> CreateAsync([FromBody] CreatePlayerRequest request)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             try
             {
-                var result = await _playerService.CreatePlayer(playerRequest);
+                var result = await _playerService.CreatePlayer(request);
 
-                return Created("", result);
+                return StatusCode(StatusCodes.Status201Created, result);
             }
             catch (ArgumentNullException ex)
             {
