@@ -15,9 +15,9 @@ namespace TGLabAPI.Tests.Domain
         {
             Guid playerId = Guid.NewGuid();
             var amount = 100;
-            var coin = "BRL";
+            var currency = "BRL";
 
-            var wallet = new WalletEntity(playerId, amount, coin);
+            var wallet = new WalletEntity(playerId, amount, currency);
 
             wallet.UpdateAmount(amount);
 
@@ -31,9 +31,9 @@ namespace TGLabAPI.Tests.Domain
             var amount = 100;
             var amountToDecrement = 50;
             var amountExpected = 50;
-            var coin = "BRL";
+            var currency = "BRL";
 
-            var wallet = new WalletEntity(playerId, amount, coin);
+            var wallet = new WalletEntity(playerId, amount, currency);
 
             var value = amount - amountToDecrement;
             wallet.UpdateAmount(value);
@@ -46,9 +46,9 @@ namespace TGLabAPI.Tests.Domain
         {
             Guid playerId = Guid.NewGuid();
             var amount = -1;
-            var coin = "BRL";
+            var currency = "BRL";
 
-            var wallet = new WalletEntity(playerId, amount, coin);
+            var wallet = new WalletEntity(playerId, amount, currency);
 
             var ex = Assert.Throws<InvalidOperationException>(() => wallet.UpdateAmount(amount));
             Assert.That(ex.Message, Is.EqualTo("Saldo insuficiente."));
@@ -60,9 +60,9 @@ namespace TGLabAPI.Tests.Domain
             var playerId = Guid.NewGuid();
             var initialAmount = 100.0;
             var amountToCheck = 50.0;
-            var coin = "BRL";
+            var currency = "BRL";
 
-            var wallet = new WalletEntity(playerId, initialAmount, coin);
+            var wallet = new WalletEntity(playerId, initialAmount, currency);
 
             var result = wallet.IsSufficient(amountToCheck);
 

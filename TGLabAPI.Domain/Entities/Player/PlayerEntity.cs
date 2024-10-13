@@ -15,5 +15,11 @@ namespace TgLabApi.Domain.Entities.Player
         public string Email { get; set; }
         public string Password { get; set; }
         public WalletEntity Wallet { get; set; }
+        public DateTimeOffset? LastBonusDate { get; set; }
+
+        public void SetBonus(DateTimeOffset date)
+        {
+            LastBonusDate = date;
+        }
     }
 }

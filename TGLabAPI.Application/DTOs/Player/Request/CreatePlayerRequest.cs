@@ -19,6 +19,6 @@ namespace TgLabApi.Application.DTOs.Player.Request
         double Amount = 0,
 
         [Required(ErrorMessage = "A moeda é obrigatória.")]
-        string Coin = "R$ - BRL"
+        string Currency = "R$ - BRL"
     );
 }

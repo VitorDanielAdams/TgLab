@@ -22,7 +22,7 @@ namespace TGLabAPI.Infrastructure.Repositories.Player
         public async Task<PlayerEntity?> GetByEmail(string email)
         {
             return await _dbContext.Set<PlayerEntity>()
-                .Where(e => e.Email == email)
+                .Where(e => e.Email == email && e.DeletedAt == null)
                 .Include(e => e.Wallet)
                 .FirstOrDefaultAsync();
         }

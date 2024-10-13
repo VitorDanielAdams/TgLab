@@ -10,18 +10,18 @@ namespace TgLabApi.Domain.Entities.Player
 {
     public class WalletEntity : BaseEntity
     {
-        public WalletEntity(Guid playerId, double amount, string coin)
+        public WalletEntity(Guid playerId, double amount, string currency)
         {
             PlayerId = playerId;
             Amount = amount;
-            Coin = coin;
+            Currency = currency;
         }
 
         [ForeignKey("PlayerId")]
         public PlayerEntity PlayerEntity { get; set; }
         public Guid PlayerId { get; set; }
         public double Amount { get; set; }
-        public string Coin { get; set; }
+        public string Currency { get; set; }
 
         public bool IsSufficient(double value)
         {

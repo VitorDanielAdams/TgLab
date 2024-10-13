@@ -91,10 +91,52 @@ namespace TgLabApi.Controllers
             }
         }
 
-        //[HttpPut]
-        //[Authorize]
-        //public async Task<ActionResult<GetPlayerResult>> Update()
-        //{
-        //}
+        [HttpPut("account")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<GetPlayerResponse>> UpdateAccount([FromBody] UpdatePlayerRequest request)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
+            {
+                var result = await _playerService.UpdateAccount(request);
+
+                return StatusCode(StatusCodes.Status201Created, result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (ApplicationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("delete")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteAccount()
+        {
+            try
+            {
+                await _playerService.DeleteAccount();
+
+                return StatusCode(StatusCodes.Status201Created);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (ApplicationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
     }
 }

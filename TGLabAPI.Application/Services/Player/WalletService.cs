@@ -33,13 +33,13 @@ namespace TGLabAPI.Application.Services.Player
             }
         }
 
-        public async Task<WalletEntity> CreateWallet(Guid playerId, double amount, string coin)
+        public async Task<WalletEntity> CreateWallet(Guid playerId, double amount, string currency)
         {
             if (amount < 0) throw new Exception("O Valor da carteira não pode ser negativo");
 
             try
             {
-                WalletEntity walletEntity = new WalletEntity(playerId, amount, coin);
+                WalletEntity walletEntity = new WalletEntity(playerId, amount, currency);
 
                 return await _walletRepository.Insert(walletEntity);
             }
@@ -49,7 +49,7 @@ namespace TGLabAPI.Application.Services.Player
             } 
         }
 
-        public Task<WalletEntity> GetByPlayerId(Guid playerId)
+        public Task<WalletEntity?> GetByPlayerId(Guid playerId)
         {
             try
             {
@@ -94,6 +94,25 @@ namespace TGLabAPI.Application.Services.Player
                 await _walletRepository.Update(wallet);
 
                 return wallet.Amount;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Erro ao adicionar valor na carteira: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<WalletEntity> UpdateWallet(WalletEntity wallet)
+        {
+            try
+            {
+                WalletEntity? dbWallet = await _walletRepository.Get(wallet.Id);
+                if (dbWallet == null) throw new Exception("Carteira não encontrada.");
+
+                dbWallet.Currency = wallet.Currency ?? dbWallet.Currency;
+
+                await _walletRepository.Update(wallet);
+
+                return dbWallet;
             }
             catch (Exception ex)
             {

@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Hub\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 

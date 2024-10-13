@@ -11,10 +11,11 @@ namespace TGLabAPI.Application.Interfaces.Services.Player
 {
     public interface IWalletService
     {
-        Task<WalletEntity> CreateWallet(Guid playerId, double amount, string coin);
-        Task<WalletEntity> GetByPlayerId(Guid playerId);
+        Task<WalletEntity> CreateWallet(Guid playerId, double amount, string currency);
+        Task<WalletEntity?> GetByPlayerId(Guid playerId);
         Task<double> RemoveAmout(Guid walletId, double value);
         Task<double> AddAmout(Guid walletId, double value); 
         Task<double> UpdateAmout(Guid walletId, double value);
+        Task<WalletEntity> UpdateWallet(WalletEntity wallet);
     }
 }

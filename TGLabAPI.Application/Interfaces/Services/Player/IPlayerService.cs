@@ -10,5 +10,8 @@ namespace TGLabAPI.Application.Interfaces.Services.Player
         Task<GetPlayerResponse> CreatePlayer(CreatePlayerRequest request);
         Task<PlayerEntity?> Me();
         Task<GetPlayerResponse?> Deposit(DepositRequest request);
+        Task<GetPlayerResponse?> UpdateAccount(UpdatePlayerRequest request);
+        Task<PlayerEntity?> Update(PlayerEntity player);
+        Task DeleteAccount();
     }
 }

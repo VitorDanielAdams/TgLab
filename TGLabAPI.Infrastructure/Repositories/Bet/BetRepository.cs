@@ -13,12 +13,12 @@ namespace TGLabAPI.Infrastructure.Repositories.Transaction
         {
         }
 
-        public async Task<List<BetEntity>> ListLastSixBets(Guid playerId)
+        public async Task<List<BetEntity>> ListLastFiveBets(Guid playerId)
         {
             return await _dbContext.Set<BetEntity>()
                 .Where(e => e.PlayerId == playerId)
                 .OrderByDescending(e => e.CreatedAt)
-                .Take(6)
+                .Take(5)
                 .ToListAsync();
         }
 

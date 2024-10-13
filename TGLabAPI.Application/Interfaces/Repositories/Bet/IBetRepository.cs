@@ -7,7 +7,7 @@ namespace TGLabAPI.Application.Interfaces.Repositories.Transaction
 {
     public interface IBetRepository : IBaseRepository<BetEntity>
     {
-        Task<List<BetEntity>> ListLastSixBets(Guid playerId);
+        Task<List<BetEntity>> ListLastFiveBets(Guid playerId);
         Task<PageableResponse<GetBetListDetailResponse>> PageableListByUser(Guid userId, int pageNumber, int pageSize);
     }
 }

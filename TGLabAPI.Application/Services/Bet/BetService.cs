@@ -131,14 +131,20 @@ namespace TGLabAPI.Application.Services.Transaction
                     bet.Lose();
                     await _betRepository.Update(bet);
 
-                    var lastBets = await _betRepository.ListLastSixBets(player.Id);
+                    var lastFiveBets = await _betRepository.ListLastFiveBets(player.Id);
 
-                    if ((lastBets.Count == 5 && lastBets.All(e => e.Status == BetStatus.Lose)) || 
-                        (lastBets.Count > 5 && lastBets.Last().Status == BetStatus.Win && lastBets.Take(5).All(e => e.Status == BetStatus.Lose)))
+                    if (lastFiveBets.Count == 5 && lastFiveBets.All(b => b.Status == BetStatus.Lose))
                     {
-                        double bonus = lastBets.Sum(e => e.Value) * 0.1;
-                        var walletAmount = await _walletService.AddAmout(walletId, bonus);
-                        await _transactionService.CreateTransaction(walletId, bet.Id, bonus, TransactionType.Bonus);
+                        var lastBetDate = lastFiveBets.Last().CreatedAt;
+                        if (player.LastBonusDate == null || player.LastBonusDate < lastBetDate)
+                        {
+                            double bonus = lastFiveBets.Sum(e => e.Value) * 0.1;
+                            var walletAmount = await _walletService.AddAmout(walletId, bonus);
+                            await _transactionService.CreateTransaction(walletId, bet.Id, bonus, TransactionType.Bonus);
+
+                            player.SetBonus(DateTime.UtcNow);
+                            await _playerService.Update(player);
+                        }
                     }
                 }
 
