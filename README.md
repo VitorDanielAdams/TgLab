@@ -1,6 +1,4 @@
-# TgLab - Sistema de Carteira Digital para Apostas
-
-## Desafio
+# TgLab - Desafio
 
 Este projeto tem como objetivo implementar uma solução de carteira digital simplificada para uma plataforma de apostas esportivas e cassino online. O sistema permite aos jogadores realizar apostas, consultar transações, ganhar prêmios e cancelar apostas, com saldo atualizado a cada operação. O jogo segue as regras de uma **roleta europeia**, onde o sistema decide as apostas com base em uma probabilidade de 37 números. As regras da roleta são:
 - O número **0** refere-se à cor **verde**.
