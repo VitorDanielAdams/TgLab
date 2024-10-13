@@ -10,5 +10,6 @@ namespace TGLabAPI.Application.Interfaces.Repositories.Player
 {
     public interface IWalletRepository : IBaseRepository<WalletEntity>
     {
+        Task<WalletEntity?> GetByPlayerId(Guid playerId);
     }
 }

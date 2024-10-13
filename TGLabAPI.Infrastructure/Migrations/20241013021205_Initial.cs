@@ -19,7 +19,6 @@ namespace TGLabAPI.Infrastructure.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
-                    Loses = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     DeletedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
@@ -39,6 +38,7 @@ namespace TGLabAPI.Infrastructure.Migrations
                     Status = table.Column<int>(type: "integer", nullable: false),
                     ValueReward = table.Column<double>(type: "double precision", nullable: true),
                     IsCanceled = table.Column<bool>(type: "boolean", nullable: false),
+                    Color = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     DeletedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
@@ -131,7 +131,8 @@ namespace TGLabAPI.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Wallets_PlayerId",
                 table: "Wallets",
-                column: "PlayerId");
+                column: "PlayerId",
+                unique: true);
         }
 
         /// <inheritdoc />

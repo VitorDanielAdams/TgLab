@@ -11,10 +11,19 @@ namespace TGLabAPI.Infrastructure.Repositories.Player
         {
         }
 
+        public async Task<PlayerEntity?> Get(Guid id)
+        {
+            return await _dbContext.Set<PlayerEntity>()
+                .Where(e => e.Id == id)
+                .Include(e => e.Wallet)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<PlayerEntity?> GetByEmail(string email)
         {
             return await _dbContext.Set<PlayerEntity>()
                 .Where(e => e.Email == email)
+                .Include(e => e.Wallet)
                 .FirstOrDefaultAsync();
         }
     }

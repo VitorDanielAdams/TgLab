@@ -13,6 +13,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using TGLabAPI.Infrastructure.Service;
+using TGLabAPI.Application.Interfaces.Services.Transaction;
+using TGLabAPI.Application.Services.Transaction;
+using TGLabAPI.Infrastructure.Middleware;
+using TGLabAPI.Application.DTOs.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +24,12 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+builder.Services.AddScoped<UserContext>();
+
+#region DBContext
 builder.Services.AddDbContext<ApiContext>(options =>
     options.UseNpgsql(connectionString));
+#endregion
 
 #region Repositories
 builder.Services.AddScoped<IBetRepository, BetRepository>();
@@ -32,9 +40,11 @@ builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 
 #region Services
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IBetService, BetService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IWalletService, WalletService>();
 #endregion
 
@@ -109,6 +119,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<UserContextMiddleware>();
 app.MapControllers();
 
 app.Run();

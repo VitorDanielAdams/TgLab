@@ -38,9 +38,6 @@ namespace TGLabAPI.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Loses")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -57,7 +54,7 @@ namespace TGLabAPI.Infrastructure.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Players", (string)null);
+                    b.ToTable("Players");
                 });
 
             modelBuilder.Entity("TgLabApi.Domain.Entities.Player.WalletEntity", b =>
@@ -87,9 +84,10 @@ namespace TGLabAPI.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayerId");
+                    b.HasIndex("PlayerId")
+                        .IsUnique();
 
-                    b.ToTable("Wallets", (string)null);
+                    b.ToTable("Wallets");
                 });
 
             modelBuilder.Entity("TgLabApi.Domain.Entities.Transaction.BetEntity", b =>
@@ -97,6 +95,9 @@ namespace TGLabAPI.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<int>("Color")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -126,7 +127,7 @@ namespace TGLabAPI.Infrastructure.Migrations
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("Bets", (string)null);
+                    b.ToTable("Bets");
                 });
 
             modelBuilder.Entity("TgLabApi.Domain.Entities.Transaction.TransactionEntity", b =>
@@ -162,14 +163,14 @@ namespace TGLabAPI.Infrastructure.Migrations
 
                     b.HasIndex("WalletId");
 
-                    b.ToTable("Trasactions", (string)null);
+                    b.ToTable("Trasactions");
                 });
 
             modelBuilder.Entity("TgLabApi.Domain.Entities.Player.WalletEntity", b =>
                 {
                     b.HasOne("TgLabApi.Domain.Entities.Player.PlayerEntity", "PlayerEntity")
-                        .WithMany()
-                        .HasForeignKey("PlayerId")
+                        .WithOne("Wallet")
+                        .HasForeignKey("TgLabApi.Domain.Entities.Player.WalletEntity", "PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -204,6 +205,12 @@ namespace TGLabAPI.Infrastructure.Migrations
                     b.Navigation("BetEntity");
 
                     b.Navigation("WalletEntity");
+                });
+
+            modelBuilder.Entity("TgLabApi.Domain.Entities.Player.PlayerEntity", b =>
+                {
+                    b.Navigation("Wallet")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

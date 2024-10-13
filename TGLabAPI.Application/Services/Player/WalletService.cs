@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using TgLabApi.Domain.Entities.Player;
+﻿using TgLabApi.Domain.Entities.Player;
 using TGLabAPI.Application.Interfaces.Repositories.Player;
 using TGLabAPI.Application.Interfaces.Services.Player;
 
@@ -17,6 +11,26 @@ namespace TGLabAPI.Application.Services.Player
         public WalletService(IWalletRepository walletRepository)
         {
             _walletRepository = walletRepository;
+        }
+
+        public async Task<double> AddAmout(Guid walletId, double value)
+        {
+            try
+            {
+                WalletEntity? wallet = await _walletRepository.Get(walletId);
+                if (wallet == null) throw new Exception("Carteira não encontrada.");
+
+                var result = wallet.Amount + value;
+
+                wallet.UpdateAmount(result); 
+                await _walletRepository.Update(wallet);
+
+                return wallet.Amount;
+            }
+            catch (Exception ex) 
+            {
+                throw new ApplicationException($"Erro ao adicionar valor na carteira: {ex.Message}", ex);
+            }
         }
 
         public async Task<WalletEntity> CreateWallet(Guid playerId, double amount, string coin)
@@ -33,6 +47,58 @@ namespace TGLabAPI.Application.Services.Player
             {
                 throw new ApplicationException($"Erro ao criar uma nova carteira: {ex.Message}", ex);
             } 
+        }
+
+        public Task<WalletEntity> GetByPlayerId(Guid playerId)
+        {
+            try
+            {
+                return _walletRepository.GetByPlayerId(playerId);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Erro ao buscar carteira: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<double> RemoveAmout(Guid walletId, double value)
+        {
+            try
+            {
+                WalletEntity? wallet = await _walletRepository.Get(walletId);
+                if (wallet == null) throw new Exception("Carteira não encontrada.");
+
+                var result = wallet.Amount - value;
+
+                if (result < 0) result = 0;
+
+                wallet.UpdateAmount(result);
+                await _walletRepository.Update(wallet);
+
+                return wallet.Amount;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Erro ao adicionar valor na carteira: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<double> UpdateAmout(Guid walletId, double value)
+        {
+            try
+            {
+                WalletEntity? wallet = await _walletRepository.Get(walletId);
+                if (wallet == null) throw new Exception("Carteira não encontrada.");
+
+                wallet.UpdateAmount(value);
+                await _walletRepository.Update(wallet);
+
+                return wallet.Amount;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Erro ao adicionar valor na carteira: {ex.Message}", ex);
+            }
         }
     }
 }

@@ -23,9 +23,14 @@ namespace TgLabApi.Domain.Entities.Player
         public double Amount { get; set; }
         public string Coin { get; set; }
 
-        public bool IsSufficient(double Value)
+        public bool IsSufficient(double value)
         {
-            return Amount >= Value;
+            return Amount >= value;
+        }
+
+        public void UpdateAmount(double value)
+        {
+            Amount = value;
         }
     }
 }

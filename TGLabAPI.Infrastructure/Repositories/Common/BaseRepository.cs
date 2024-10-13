@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TgLabApi.Domain.Entities.Common;
 using TGLabAPI.Application.Interfaces.Repositories.Common;
 
 namespace TGLabAPI.Infrastructure.Repositories.Common
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
         protected readonly ApiContext _dbContext;
         protected readonly DbSet<T> _dbSet;
@@ -56,6 +57,8 @@ namespace TGLabAPI.Infrastructure.Repositories.Common
         {
             try
             {
+                entity.UpdatedAt = DateTimeOffset.UtcNow;
+
                 _dbSet.Attach(entity);
                 _dbContext.Entry(entity).State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync(); 
@@ -70,7 +73,9 @@ namespace TGLabAPI.Infrastructure.Repositories.Common
         {
             try
             {
-                _dbSet.Remove(entity);
+                entity.DeletedAt = DateTimeOffset.UtcNow;
+
+                _dbSet.Update(entity);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception e) 

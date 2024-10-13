@@ -18,7 +18,15 @@ namespace TGLabAPI.Domain.Entities
     {
         Bet = 0,
         Reward = 1,
-        Revocation = 2,
-        Bonus = 3,
+        Cancelled = 2,
+        Refund = 3,
+        Bonus = 4,
+    }
+
+    public enum Color
+    {
+        Green = 0,
+        Black = 1,
+        Red = 2
     }
 }

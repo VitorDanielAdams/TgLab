@@ -12,7 +12,7 @@ using TGLabAPI.Infrastructure;
 namespace TGLabAPI.Infrastructure.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20241012033534_Initial")]
+    [Migration("20241013021205_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -40,9 +40,6 @@ namespace TGLabAPI.Infrastructure.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("Loses")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -90,7 +87,8 @@ namespace TGLabAPI.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayerId");
+                    b.HasIndex("PlayerId")
+                        .IsUnique();
 
                     b.ToTable("Wallets");
                 });
@@ -100,6 +98,9 @@ namespace TGLabAPI.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<int>("Color")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -171,8 +172,8 @@ namespace TGLabAPI.Infrastructure.Migrations
             modelBuilder.Entity("TgLabApi.Domain.Entities.Player.WalletEntity", b =>
                 {
                     b.HasOne("TgLabApi.Domain.Entities.Player.PlayerEntity", "PlayerEntity")
-                        .WithMany()
-                        .HasForeignKey("PlayerId")
+                        .WithOne("Wallet")
+                        .HasForeignKey("TgLabApi.Domain.Entities.Player.WalletEntity", "PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -207,6 +208,12 @@ namespace TGLabAPI.Infrastructure.Migrations
                     b.Navigation("BetEntity");
 
                     b.Navigation("WalletEntity");
+                });
+
+            modelBuilder.Entity("TgLabApi.Domain.Entities.Player.PlayerEntity", b =>
+                {
+                    b.Navigation("Wallet")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

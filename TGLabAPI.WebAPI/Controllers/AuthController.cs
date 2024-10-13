@@ -26,11 +26,11 @@ namespace TgLabApi.Controllers
             {
                 if (request == null || !ModelState.IsValid) return BadRequest("Dados de login incompletos.");
 
-                var token = await _authService.Authenticate(request.Email, request.Password);
+                var response = await _authService.Authenticate(request.Email, request.Password);
 
-                if (token == null) return Unauthorized("Credenciais inválidas.");
+                if (response == null) return Unauthorized("Credenciais inválidas.");
 
-                return Ok(new LoginResult(token));
+                return Ok(response);
             }
             catch (ArgumentNullException ex)
             {
