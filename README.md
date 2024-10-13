@@ -58,14 +58,14 @@ Este projeto tem como objetivo implementar uma solução de carteira digital sim
 4. **Rode as migrações** para configurar o banco de dados:
 
     ```bash
-    dotnet ef database update
+    dotnet tool install --global mlnet-win-x64
+    dotnet tool install --global dotnet-ef
+    dotnet ef database update --project ./TGLabAPI.Infrastructure/TGLabAPI.Infrastructure.csproj
     ```
 
-5. **Compile e rode a aplicação**:
+5. **Rode o projeto**:
 
-    ```bash
-    dotnet run
-    ```
+    - Abra o projeto defina 'TGLabAPI.WebAP' como projeto de inicialização e rode a aplicação(IIS Express)
 
 6. **Acesse a documentação do Swagger** para testar a API:
 

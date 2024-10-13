@@ -1,4 +1,5 @@
-﻿using TgLabApi.Domain.Entities.Player;
+﻿using System.Numerics;
+using TgLabApi.Domain.Entities.Player;
 using TgLabApi.Domain.Entities.Transaction;
 using TGLabAPI.Application.DTOs.Common;
 using TGLabAPI.Application.DTOs.Transaction.Request;
@@ -16,18 +17,21 @@ namespace TGLabAPI.Application.Services.Transaction
         private readonly IPlayerService _playerService;
         private readonly ITransactionService _transactionService;
         private readonly IWalletService _walletService;
+        private readonly IWalletUpdateService _walletUpdateService;
 
         public BetService(
             IBetRepository betRepository, 
             IPlayerService playerService, 
             ITransactionService transactionService, 
-            IWalletService walletService
+            IWalletService walletService,
+            IWalletUpdateService walletUpdateService
             )
         {
             _betRepository = betRepository;
             _playerService = playerService;
             _transactionService = transactionService;
             _walletService = walletService;
+            _walletUpdateService = walletUpdateService;
         }
 
         public async Task<GetBetResponse> CreateBet(CreateBetRequest commandCreateBet)
@@ -48,6 +52,7 @@ namespace TGLabAPI.Application.Services.Transaction
                 var bet = await _betRepository.Insert(newBet);
 
                 var walletAmount = await _walletService.RemoveAmout(player.Wallet.Id, commandCreateBet.Value);
+                await _walletUpdateService.SendMessage(player.Id, walletAmount);
                 await _transactionService.CreateTransaction(player.Wallet.Id, bet.Id, bet.Value, TransactionType.Bet);
 
                 betHistory = bet;
@@ -63,6 +68,7 @@ namespace TGLabAPI.Application.Services.Transaction
                 if (walletHistory != null && betHistory != null && !betHistory.IsCanceled)
                 {
                     await _walletService.UpdateAmout(walletHistory.Id, walletHistory.Amount);
+                    await _walletUpdateService.SendMessage(walletHistory.PlayerId, walletHistory.Amount);
                     await _transactionService.CreateTransaction(walletHistory.Id, betHistory.Id, betHistory.Value, TransactionType.Refund);
                     betHistory.Cancel();
                     await _betRepository.Update(betHistory);
@@ -92,6 +98,7 @@ namespace TGLabAPI.Application.Services.Transaction
 
                     await _transactionService.CreateTransaction(player.Wallet.Id, bet.Id, bet.Value, TransactionType.Cancelled);
                     player.Wallet.UpdateAmount(value);
+                    await _walletUpdateService.SendMessage(player.Id, value);
                     await _walletService.UpdateAmout(player.Wallet.Id, player.Wallet.Amount);
                 }
 
@@ -124,6 +131,7 @@ namespace TGLabAPI.Application.Services.Transaction
                     bet.Win();
                     await _betRepository.Update(bet);
                     var walletAmount = await _walletService.AddAmout(walletId, bet.ValueReward!.Value);
+                    await _walletUpdateService.SendMessage(player.Id, walletAmount);
                     await _transactionService.CreateTransaction(walletId, bet.Id, bet.ValueReward!.Value, TransactionType.Reward);
                 }
                 else
@@ -140,6 +148,7 @@ namespace TGLabAPI.Application.Services.Transaction
                         {
                             double bonus = lastFiveBets.Sum(e => e.Value) * 0.1;
                             var walletAmount = await _walletService.AddAmout(walletId, bonus);
+                            await _walletUpdateService.SendMessage(player.Id, walletAmount);
                             await _transactionService.CreateTransaction(walletId, bet.Id, bonus, TransactionType.Bonus);
 
                             player.SetBonus(DateTime.UtcNow);

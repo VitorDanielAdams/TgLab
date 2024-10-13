@@ -17,6 +17,9 @@ using TGLabAPI.Application.Interfaces.Services.Transaction;
 using TGLabAPI.Application.Services.Transaction;
 using TGLabAPI.Infrastructure.Middleware;
 using TGLabAPI.Application.DTOs.Auth;
+using TGLabAPI.Infrastructure.Services;
+using System.Net.WebSockets;
+using TGLabAPI.Infrastructure.WebSockets;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +27,7 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddScoped<UserContext>();
+builder.Services.AddSingleton<UserContext>();
 
 #region DBContext
 builder.Services.AddDbContext<ApiContext>(options =>
@@ -46,6 +49,11 @@ builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IWalletService, WalletService>();
+builder.Services.AddScoped<IWalletUpdateService, WalletUpdateService>();
+#endregion
+
+#region WebSocket
+builder.Services.AddSingleton<WebSocketConnectionManager>();
 #endregion
 
 #region JWT
@@ -124,4 +132,41 @@ app.UseAuthorization();
 app.UseMiddleware<UserContextMiddleware>();
 app.MapControllers();
 
+app.UseWebSockets();
+
+app.Map("/ws", async context =>
+{
+    if (context.WebSockets.IsWebSocketRequest)
+    {
+        var webSocketConnectionManager = context.RequestServices.GetRequiredService<WebSocketConnectionManager>();
+        var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+        var connection = webSocketConnectionManager.AddSocket(webSocket);
+        await ReceiveMessages(context, webSocket, webSocketConnectionManager);
+    }
+    else
+    {
+        context.Response.StatusCode = 400;
+    }
+});
+
 app.Run();
+
+static async Task ReceiveMessages(HttpContext context, WebSocket webSocket, WebSocketConnectionManager connectionManager)
+{
+    var buffer = new byte[1024 * 4];
+    WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+    while (!result.CloseStatus.HasValue)
+    {
+        var receivedMessage = Encoding.UTF8.GetString(buffer, 0, result.Count);
+        Console.WriteLine($"Received: {receivedMessage}");
+
+        result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+    }
+
+    var socketId = connectionManager.GetAllSockets().FirstOrDefault(s => s.Value == webSocket).Key;
+    if (socketId != null)
+    {
+        await connectionManager.RemoveSocket(socketId);
+    }
+}
