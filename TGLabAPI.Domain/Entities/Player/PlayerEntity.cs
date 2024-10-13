@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using TgLabApi.Domain.Entities.Common;
+﻿using TgLabApi.Domain.Entities.Common;
  
 namespace TgLabApi.Domain.Entities.Player
 {

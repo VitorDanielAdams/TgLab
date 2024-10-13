@@ -47,7 +47,7 @@ namespace TGLabAPI.Application.Services.Transaction
                 BetEntity newBet = new BetEntity(player.Id, commandCreateBet.Value, Domain.Entities.BetStatus.Pending, commandCreateBet.Color);
                 var bet = await _betRepository.Insert(newBet);
 
-                await _walletService.RemoveAmout(player.Wallet.Id, commandCreateBet.Value);
+                var walletAmount = await _walletService.RemoveAmout(player.Wallet.Id, commandCreateBet.Value);
                 await _transactionService.CreateTransaction(player.Wallet.Id, bet.Id, bet.Value, TransactionType.Bet);
 
                 betHistory = bet;
@@ -123,7 +123,7 @@ namespace TGLabAPI.Application.Services.Transaction
                 {
                     bet.Win();
                     await _betRepository.Update(bet);
-                    await _walletService.AddAmout(walletId, bet.ValueReward!.Value);
+                    var walletAmount = await _walletService.AddAmout(walletId, bet.ValueReward!.Value);
                     await _transactionService.CreateTransaction(walletId, bet.Id, bet.ValueReward!.Value, TransactionType.Reward);
                 }
                 else
@@ -137,7 +137,7 @@ namespace TGLabAPI.Application.Services.Transaction
                         (lastBets.Count > 5 && lastBets.Last().Status == BetStatus.Win && lastBets.Take(5).All(e => e.Status == BetStatus.Lose)))
                     {
                         double bonus = lastBets.Sum(e => e.Value) * 0.1;
-                        await _walletService.AddAmout(walletId, bonus);
+                        var walletAmount = await _walletService.AddAmout(walletId, bonus);
                         await _transactionService.CreateTransaction(walletId, bet.Id, bonus, TransactionType.Bonus);
                     }
                 }

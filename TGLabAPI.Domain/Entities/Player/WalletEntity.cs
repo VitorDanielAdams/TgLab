@@ -30,6 +30,7 @@ namespace TgLabApi.Domain.Entities.Player
 
         public void UpdateAmount(double value)
         {
+            if (value < 0) throw new InvalidOperationException("Saldo insuficiente.");
             Amount = value;
         }
     }
